@@ -1,0 +1,34 @@
+############################
+#      PremiumReports      #
+#       Messages file      #
+############################
+
+no-permission: '&cYou do not have permission to run this command!'
+wrong-parameters: '&cWrong parameters! Use &7/'
+only-by-players: '&cThis command can only be executed by a player'
+must-be-online: '&cThis player must be online'
+report-info:
+  - '&8------------------------------'
+  - '&8• &7ID: &a%id%'
+  - '&8• &7Reporter: &a%reporter%'
+  - '&8• &7Reported: &a%reported%'
+  - '&8• &7Reason: &a%reason%'
+  - '&8• &7Date: &a%date%'
+  - '&8• &7Result: &a%result%'
+  - '&8• &7Completed by: &a%completedBy%'
+  - '&8• &7Completed date: &a%completedDate%'
+  - '&8------------------------------'
+result-undefined: '&8Undefined'
+result-valid: '&aValid'
+result-invalid: '&cInvalid'
+report-created: '&aReport created successfully! View its current status with &f/reports'
+report-yourself: '&cYou cannot report yourself!'
+reported-offline: '&cThe reported player is not online!'
+report-validated: '&aYou marked this report as valid!'
+report-invalidated: '&aYou marked this report as invalid!'
+report-valid: '&aYour report was valid, so you earned &l%s &apoints!'
+report-invalid: '&cYour report was invalid, so you lost &l%s &cpoints!'
+user-blocked: '&aYou blocked this user successfully!'
+user-unblocked: '&aYou unblocked this user successfully!'
+cant-create: '&cYou can''t create reports at the moment!'
+plugin-reloaded: '&aPlugin reloaded successfully!'

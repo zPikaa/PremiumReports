@@ -1,0 +1,6 @@
+name: PremiumReports
+version: 1.0.0
+main: it.pika.premiumreports.Main
+api-version: '1.13'
+authors: [Pika]
+description: PremiumReports plugin made with love and pizza by Pika

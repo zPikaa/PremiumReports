@@ -1,0 +1,102 @@
+############################
+#      PremiumReports      #
+#    Configuration file    #
+############################
+
+# What type of storage should the plugin use?
+#
+# Possible options:
+# - MySQL (remote database, requires connection information)
+# - SQLite (local database, requires no configuration)
+#
+Storage:
+  Type: 'SQLite'
+  MySQL: # MySQL's connection information, ignore if storage type is not 'MySQL'
+    Host: 'localhost'
+    Port: 3306
+    Database: 'premiumreports'
+    Username: 'root'
+    Password: ''
+
+Options:
+  Default-Points: 50 # The default number of points a player has when first registered
+  Date-Format: 'dd/MM/yyyy HH:mm' # The format of the plugin dates, for more information see: https://help.gooddata.com/cloudconnect/manual/date-and-time-format.html
+  Report-Himself: false # If enabled, the player will be able to report themselves
+  Reported-Online: true # If enabled, reported players must be online
+  Valid-Report-Points: 2 # The number of points earned for each valid report
+  Invalid-Report-Points: 1 # The number of points lost for each invalid report
+
+User-Menu:
+  Title: 'My reports' # The GUI title
+  Size:
+    Rows: 6 # The number of horizontal rows, can be up to 6
+    Columns: 9 # The number of vertical columns, normally there are 9
+  New-Report:
+    Name: '&a&lNew report' # The displayed name of the item
+    Material: ANVIL # The material, see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html for more information
+    Lore: # The item lore
+      - '&7Click to report a player'
+  Previous-Page:
+    Name: '&2Previous page'
+    Material: ARROW
+    Lore: []
+  Next-Page:
+    Name: '&2Next page'
+    Material: ARROW
+    Lore: []
+  Report:
+    Name: '&aReport &l#%id%'
+    Material: PAPER
+    Lore:
+      - '&7Reported: &f%reported%'
+      - '&7Reason: &f%reason%'
+      - '&7Date: &f%date%'
+      - ''
+      - '&aClick for more information!'
+
+Staff-Menu:
+  Title: 'All reports'
+  Size:
+    Rows: 6
+    Columns: 9
+  Pending-Report:
+    Name: '&aReport &l%id% &c(pending)'
+    Material: MAP
+    Lore:
+      - '&7Reported: &f%reported%'
+      - '&7Reason: &f%reason%'
+      - '&7Date: &f%date%'
+      - ''
+      - '&aLeft-click to validate!'
+      - '&aRight click to invalidate!'
+  Completed-Report:
+    Name: '&aReport &l%id% &a(completed)'
+    Material: PAPER
+    Lore:
+      - '&7Reported: &f%reported%'
+      - '&7Reason: &f%reason%'
+      - '&7Date: &f%date%'
+      - ''
+      - '&aClick for more information!'
+  Previous-Page:
+    Name: '&2Previous page'
+    Material: ARROW
+    Lore: []
+  Next-Page:
+    Name: '&2Next page'
+    Material: ARROW
+    Lore: []
+  Current-Page:
+    Name: '&aCurrent page: &l%page%'
+    Material: PAPER
+    Lore: []
+
+# Customize the report procedure
+Report-Procedure:
+  Time: 60 # The time (in seconds) you have to complete it
+  Reported:
+    Title: '&2&lReported'
+    Sub-Title: '&7Type in chat the name of the reported'
+  Reason:
+    Title: '&2&lReason'
+    Sub-Title: '&7Type in chat the reason of the report'
