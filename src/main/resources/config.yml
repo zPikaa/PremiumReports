@@ -19,6 +19,7 @@ Storage:
     Password: ''
 
 Options:
+  Language: 'en'
   Default-Points: 50 # The default number of points a player has when first registered
   Date-Format: 'dd/MM/yyyy HH:mm' # The format of the plugin dates, for more information see: https://help.gooddata.com/cloudconnect/manual/date-and-time-format.html
   Report-Himself: false # If enabled, the player will be able to report themselves
@@ -53,6 +54,11 @@ User-Menu:
       - '&7Date: &f%date%'
       - ''
       - '&aClick for more information!'
+  Your-Points:
+    Name: '&a&lYour points'
+    Material: EMERALD
+    Lore:
+      - '&7You currently have &a%points% &7points.'
 
 Staff-Menu:
   Title: 'All reports'

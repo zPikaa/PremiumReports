@@ -7,7 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @AllArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class MySQLCredentials {
 
     private String host;

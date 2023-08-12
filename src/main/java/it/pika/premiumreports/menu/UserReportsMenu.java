@@ -7,6 +7,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.SlotIterator;
 import fr.minuskube.inv.content.SlotPos;
+import it.pika.libs.config.Config;
 import it.pika.libs.item.ItemBuilder;
 import it.pika.premiumreports.Main;
 import it.pika.premiumreports.enums.Messages;
@@ -15,6 +16,8 @@ import it.pika.premiumreports.objects.User;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 import static it.pika.libs.chat.Chat.error;
 
@@ -46,14 +49,15 @@ public class UserReportsMenu implements InventoryProvider {
             items[i] = ClickableItem.of(new ItemBuilder()
                     .material(Material.valueOf(Main.getConfigFile().getString("User-Menu.Report.Material")))
                     .name(Main.parseMessage(Main.getConfigFile().getString("User-Menu.Report.Name")
-                            .replaceAll("%id%", String.valueOf(i+1)), report))
+                            .replaceAll("%id%", String.valueOf(i + 1)), report))
                     .lore(Main.parseMessage(Main.getConfigFile().getStringList("User-Menu.Report.Lore"), report))
                     .build(), e -> {
                 player.closeInventory();
 
-                for (String s : Main.getMessagesFile().getStringList("report-info"))
+                var config = new Config(Main.getInstance(), Main.getLanguageManager().getLanguage().getFile(), false);
+                for (String s : config.getStringList("report-info"))
                     player.sendMessage(Component.text(Main.parseMessage(s, report)
-                            .replaceAll("%id%", String.valueOf(finalI +1))));
+                            .replaceAll("%id%", String.valueOf(finalI + 1))));
             });
         }
 
@@ -65,6 +69,12 @@ public class UserReportsMenu implements InventoryProvider {
                 .blacklist(5, 3).blacklist(5, 4).blacklist(5, 5)
                 .blacklist(5, 6).blacklist(5, 7).blacklist(5, 8);
         pagination.addToIterator(iterator);
+
+        contents.set(SlotPos.of(5, 0), ClickableItem.empty(new ItemBuilder()
+                .material(Material.valueOf(Main.getConfigFile().getString("User-Menu.Your-Points.Material")))
+                .name(Main.parseColors(Main.getConfigFile().getString("User-Menu.Your-Points.Name")))
+                .lore(parsePoints(Main.getConfigFile().getStringList("User-Menu.Your-Points.Lore"), player))
+                .build()));
 
         contents.set(SlotPos.of(5, 4), ClickableItem.of(new ItemBuilder()
                 .material(Material.valueOf(Main.getConfigFile().getString("User-Menu.New-Report.Material")))
@@ -97,6 +107,16 @@ public class UserReportsMenu implements InventoryProvider {
 
     @Override
     public void update(Player player, InventoryContents contents) {
-
     }
+
+    private List<String> parsePoints(List<String> list, Player player) {
+        List<String> newList = Lists.newArrayList();
+
+        for (String s : list)
+            newList.add(Main.parseColors(s).replaceAll("%points%",
+                    String.valueOf(User.of(player).getPoints())));
+
+        return newList;
+    }
+
 }

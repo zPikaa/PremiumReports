@@ -7,6 +7,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.SlotIterator;
 import fr.minuskube.inv.content.SlotPos;
+import it.pika.libs.config.Config;
 import it.pika.libs.item.ItemBuilder;
 import it.pika.premiumreports.Main;
 import it.pika.premiumreports.api.events.ReportCompleteEvent;
@@ -17,8 +18,8 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 
+import java.util.Date;
 import java.util.Objects;
 
 import static it.pika.libs.chat.Chat.success;
@@ -50,14 +51,16 @@ public class StaffMenu implements InventoryProvider {
                 items[i] = ClickableItem.of(new ItemBuilder()
                         .material(Material.valueOf(Main.getConfigFile().getString("Staff-Menu.Pending-Report.Material")))
                         .name(Main.parseMessage(Main.getConfigFile().getString("Staff-Menu.Pending-Report.Name")
-                                .replaceAll("%id%", String.valueOf(i+1)), report))
+                                .replaceAll("%id%", String.valueOf(i + 1)), report))
                         .lore(Main.parseMessage(Main.getConfigFile().getStringList("Staff-Menu.Pending-Report.Lore"), report))
                         .build(), e -> {
                     if (e.isLeftClick()) {
                         player.closeInventory();
 
-                        Main.getStorage().setResult(report, Report.Result.VALID);
+                        Main.getStorage().complete(report, Report.Result.VALID, player.getName());
                         Main.getReports().get(finalI).setResult(Report.Result.VALID);
+                        Main.getReports().get(finalI).setCompletedBy(player.getName());
+                        Main.getReports().get(finalI).setCompletedDate(new Date(System.currentTimeMillis()));
 
                         var user = User.of(Bukkit.getOfflinePlayer(report.getReporter()));
                         Main.getStorage().setPoints(user, user.getPoints()
@@ -74,8 +77,10 @@ public class StaffMenu implements InventoryProvider {
                     } else if (e.isRightClick()) {
                         player.closeInventory();
 
-                        Main.getStorage().setResult(report, Report.Result.INVALID);
-                        Main.getReports().get(finalI).setResult(Report.Result.VALID);
+                        Main.getStorage().complete(report, Report.Result.INVALID, player.getName());
+                        Main.getReports().get(finalI).setResult(Report.Result.INVALID);
+                        Main.getReports().get(finalI).setCompletedBy(player.getName());
+                        Main.getReports().get(finalI).setCompletedDate(new Date(System.currentTimeMillis()));
 
                         var user = User.of(Bukkit.getOfflinePlayer(report.getReporter()));
                         Main.getStorage().setPoints(user, user.getPoints()
@@ -95,14 +100,15 @@ public class StaffMenu implements InventoryProvider {
                 items[i] = ClickableItem.of(new ItemBuilder()
                         .material(Material.valueOf(Main.getConfigFile().getString("Staff-Menu.Completed-Report.Material")))
                         .name(Main.parseMessage(Main.getConfigFile().getString("Staff-Menu.Completed-Report.Name"), report)
-                                .replaceAll("%id%", String.valueOf(i+1)))
+                                .replaceAll("%id%", String.valueOf(i + 1)))
                         .lore(Main.parseMessage(Main.getConfigFile().getStringList("Staff-Menu.Completed-Report.Lore"), report))
                         .build(), e -> {
                     player.closeInventory();
 
-                    for (String s : Main.getMessagesFile().getStringList("report-info"))
+                    var config = new Config(Main.getInstance(), Main.getLanguageManager().getLanguage().getFile(), false);
+                    for (String s : config.getStringList("report-info"))
                         player.sendMessage(Component.text(Main.parseMessage(s, report)
-                                .replaceAll("%id%", String.valueOf(finalI+1))));
+                                .replaceAll("%id%", String.valueOf(finalI + 1))));
                 });
             }
         }
@@ -119,7 +125,7 @@ public class StaffMenu implements InventoryProvider {
         contents.set(SlotPos.of(5, 4), ClickableItem.empty(new ItemBuilder()
                 .material(Material.valueOf(Main.getConfigFile().getString("Staff-Menu.Current-Page.Material")))
                 .name(Main.parseColors(Main.getConfigFile().getString("Staff-Menu.Current-Page.Name")
-                                .replaceAll("%page%", String.valueOf(pagination.getPage()+1))))
+                        .replaceAll("%page%", String.valueOf(pagination.getPage() + 1))))
                 .lore(Main.parseColors(Main.getConfigFile().getStringList("Staff-Menu.Current-Page.Lore")))
                 .build()));
 

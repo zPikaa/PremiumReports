@@ -6,6 +6,8 @@ public class Perms {
             USER = "premiumreports.user",
             STAFF = "premiumreports.staff",
             RELOAD = "premiumreports.reload",
-            BLOCK = "premiumreports.block";
+            BLOCK = "premiumreports.block",
+            INFO = "premiumreports.info",
+            SET_POINTS = "premiumreports.set_points";
 
 }

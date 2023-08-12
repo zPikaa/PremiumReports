@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.tchristofferson.configupdater.ConfigUpdater;
 import fr.minuskube.inv.InventoryManager;
 import it.pika.libs.config.Config;
+import it.pika.libs.reflection.Reflections;
 import it.pika.premiumreports.api.events.ReportsInitializeEvent;
 import it.pika.premiumreports.commands.ReportCmd;
 import it.pika.premiumreports.listeners.JoinListener;
@@ -14,6 +15,9 @@ import it.pika.premiumreports.storage.Storage;
 import it.pika.premiumreports.storage.StorageType;
 import it.pika.premiumreports.storage.impl.MySQL;
 import it.pika.premiumreports.storage.impl.SQLite;
+import it.pika.premiumreports.utils.LanguageManager;
+import it.pika.premiumreports.utils.Metrics;
+import it.pika.premiumreports.utils.UpdateChecker;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
@@ -36,21 +40,29 @@ public final class Main extends JavaPlugin {
     private static Storage storage = null;
     @Getter
     private static InventoryManager inventoryManager = null;
+    @Getter
+    private static LanguageManager languageManager = null;
 
 
     @Getter
     private static Config configFile = null;
-    @Getter
-    private static Config messagesFile = null;
 
 
     @Getter
     private static final List<Report> reports = Lists.newArrayList();
+    public static final String VERSION = "1.3.0";
 
     @Override
     public void onEnable() {
         instance = this;
         var stopwatch = Stopwatch.createStarted();
+
+        if (Reflections.getNumericalVersion() < 13) {
+            stopwatch.stop();
+            console.warning("Server version not supported, disabling the plugin...");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
 
         setupFiles();
         if (!setupStorage()) {
@@ -62,10 +74,14 @@ public final class Main extends JavaPlugin {
         registerListeners();
         registerCommands();
         setupInventories();
+        checkForUpdates();
 
         stopwatch.stop();
         Bukkit.getPluginManager().callEvent(new ReportsInitializeEvent(this));
+        new Metrics(this, 19232);
+
         console.info("Plugin enabled in %s ms.".formatted(stopwatch.elapsed(TimeUnit.MILLISECONDS)));
+        console.info("For support join my Discord server: dsc.gg/premiumreports");
     }
 
     @Override
@@ -77,13 +93,13 @@ public final class Main extends JavaPlugin {
     @SneakyThrows
     private void setupFiles() {
         configFile = new Config(this, "config.yml");
-        messagesFile = new Config(this, "messages.yml");
 
         ConfigUpdater.update(this, "config.yml", configFile.getFile());
-        ConfigUpdater.update(this, "messages.yml", messagesFile.getFile());
 
         configFile.reload();
-        messagesFile.reload();
+
+        languageManager = new LanguageManager();
+        languageManager.init();
     }
 
     private boolean setupStorage() {
@@ -122,6 +138,13 @@ public final class Main extends JavaPlugin {
     private void setupInventories() {
         inventoryManager = new InventoryManager(this);
         inventoryManager.init();
+    }
+
+    private void checkForUpdates() {
+        new UpdateChecker(this, 111482).getVersion(version -> {
+            if (!version.equals(VERSION))
+                console.warning("A new update is available! Download it from the official SpigotMC page");
+        });
     }
 
     public static String parseColors(String s) {

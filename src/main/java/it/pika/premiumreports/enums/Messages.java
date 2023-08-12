@@ -1,5 +1,6 @@
 package it.pika.premiumreports.enums;
 
+import it.pika.libs.config.Config;
 import it.pika.premiumreports.Main;
 import lombok.AllArgsConstructor;
 
@@ -23,11 +24,19 @@ public enum Messages {
     USER_BLOCKED,
     USER_UNBLOCKED,
     CANT_CREATE,
-    PLUGIN_RELOADED;
+    PLUGIN_RELOADED,
+    NEW_UPDATE,
+    YES_MESSAGE,
+    NO_MESSAGE,
+    INVALID_USER,
+    INVALID_NUMBER,
+    POINTS_SET;
 
     public String get() {
-        var path = name().toLowerCase().replaceAll("_", "-");
-        return Main.getMessagesFile().getString(path);
+        var language = Main.getLanguageManager().getLanguage();
+        var config = new Config(Main.getInstance(), language.getFile(), false);
+
+        return config.getString(name().replaceAll("_", "-").toLowerCase());
     }
 
 }

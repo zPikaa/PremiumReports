@@ -89,13 +89,6 @@ public class SQLite extends Storage {
 
     @Override
     @SneakyThrows
-    public void setResult(Report report, Report.Result result) {
-        connection.preparedUpdate("UPDATE reports SET result = ? WHERE uuid = ?", result.getId(),
-                report.getUuid().toString());
-    }
-
-    @Override
-    @SneakyThrows
     public void setPoints(User user, int points) {
         connection.preparedUpdate("UPDATE users SET points = ? WHERE uuid = ?", points,
                 user.getPlayer().getUniqueId().toString());
@@ -149,6 +142,13 @@ public class SQLite extends Storage {
                 player.getName(), reported, reason, System.currentTimeMillis(), 0);
 
         Main.getReports().add(getReport(uuid));
+    }
+
+    @Override
+    @SneakyThrows
+    public void complete(Report report, Report.Result result, String completer) {
+        connection.preparedUpdate("UPDATE reports SET result = ?, completedBy = ?, completedDate = ? WHERE uuid = ?",
+                result.getId(), completer, System.currentTimeMillis(), report.getUuid().toString());
     }
 
 }

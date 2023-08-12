@@ -10,7 +10,8 @@ import java.util.Date;
 import java.util.UUID;
 
 @AllArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class Report {
 
     private UUID uuid;
@@ -23,7 +24,14 @@ public class Report {
     private Date completedDate;
 
     public static Report of(UUID uuid) {
-        return Main.getStorage().getReport(uuid);
+        for (Report report : Main.getReports()) {
+            if (report.getUuid() != uuid)
+                continue;
+
+            return report;
+        }
+
+        return null;
     }
 
     @AllArgsConstructor

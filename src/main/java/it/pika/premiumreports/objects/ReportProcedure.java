@@ -30,7 +30,8 @@ public class ReportProcedure implements Listener {
         phase = Phase.REPORTED;
         active = true;
 
-        Reflections.sendTitle(player, Main.parseColors(Main.getConfigFile().getString("Report-Procedure.Reported.Title")),
+
+        player.sendTitle(Main.parseColors(Main.getConfigFile().getString("Report-Procedure.Reported.Title")),
                 Main.parseColors(Main.getConfigFile().getString("Report-Procedure.Reported.Sub-Title")),
                 10, 9999999, 0);
     }
@@ -67,7 +68,7 @@ public class ReportProcedure implements Listener {
             reported = message;
             phase = Phase.REASON;
 
-            Reflections.sendTitle(player, Main.parseColors(Main.getConfigFile().getString("Report-Procedure.Reason.Title")),
+            player.sendTitle(Main.parseColors(Main.getConfigFile().getString("Report-Procedure.Reason.Title")),
                     Main.parseColors(Main.getConfigFile().getString("Report-Procedure.Reason.Sub-Title")),
                     10, 9999999, 0);
             return;
