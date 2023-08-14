@@ -156,9 +156,6 @@ public class MySQL extends Storage {
     public User getUser(OfflinePlayer player) {
         var r = connection.preparedQuery("SELECT * FROM users WHERE uuid = ?", player.getUniqueId().toString());
 
-        if (player == null)
-            return null;
-
         if (!r.next())
             return null;
 

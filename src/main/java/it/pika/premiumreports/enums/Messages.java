@@ -36,7 +36,7 @@ public enum Messages {
         var language = Main.getLanguageManager().getLanguage();
         var config = new Config(Main.getInstance(), language.getFile(), false);
 
-        return config.getString(name().replaceAll("_", "-").toLowerCase());
+        return Main.parseColors(config.getString(name().replaceAll("_", "-").toLowerCase()));
     }
 
 }

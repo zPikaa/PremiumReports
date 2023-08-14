@@ -19,7 +19,6 @@ public class ReportProcedure implements Listener {
     private boolean active;
     private Phase phase;
     private String reported;
-    private String reason;
 
     public ReportProcedure(Player player) {
         this.player = player;
@@ -75,10 +74,9 @@ public class ReportProcedure implements Listener {
         }
 
         if (phase == Phase.REASON) {
-            reason = message;
             end();
 
-            Main.getStorage().createReport(player, reported, reason);
+            Main.getStorage().createReport(player, reported, message);
             success(player, Messages.REPORT_CREATED.get());
         }
     }

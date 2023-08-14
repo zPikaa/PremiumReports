@@ -18,14 +18,12 @@ import java.util.UUID;
 
 public class SQLite extends Storage {
 
-    private File file;
-
     private Connection connection;
 
     @Override
     @SneakyThrows
     public void init() {
-        file = new File(Main.getInstance().getDataFolder(), "storage.db");
+        File file = new File(Main.getInstance().getDataFolder(), "storage.db");
         if (!file.exists())
             file.createNewFile();
 
