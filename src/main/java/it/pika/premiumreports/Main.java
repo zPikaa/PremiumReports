@@ -50,7 +50,7 @@ public final class Main extends JavaPlugin {
 
     @Getter
     private static final List<Report> reports = Lists.newArrayList();
-    public static final String VERSION = "1.3.1";
+    public static final String VERSION = "1.3.2";
 
     @Override
     public void onEnable() {
@@ -75,6 +75,10 @@ public final class Main extends JavaPlugin {
         registerCommands();
         setupInventories();
         checkForUpdates();
+
+        if (isFolia())
+            console.info("It sounds like you are using Folia. " +
+                    "If you experience an issue while using it please report it on my Discord server.");
 
         stopwatch.stop();
         Bukkit.getPluginManager().callEvent(new ReportsInitializeEvent(this));
@@ -145,6 +149,15 @@ public final class Main extends JavaPlugin {
             if (!version.equals(VERSION))
                 console.warning("A new update is available! Download it from the official SpigotMC page");
         });
+    }
+
+    private boolean isFolia() {
+        try {
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServerInitEvent");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 
     public static String parseColors(String s) {
