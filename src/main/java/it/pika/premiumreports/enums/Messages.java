@@ -1,5 +1,6 @@
 package it.pika.premiumreports.enums;
 
+import it.pika.libs.chat.Chat;
 import it.pika.libs.config.Config;
 import it.pika.premiumreports.Main;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,7 @@ public enum Messages {
         var language = Main.getLanguageManager().getLanguage();
         var config = new Config(Main.getInstance(), language.getFile(), false);
 
-        return Main.parseColors(config.getString(name().replaceAll("_", "-").toLowerCase()));
+        return Chat.parseColors(config.getString(name().replaceAll("_", "-").toLowerCase()));
     }
 
 }

@@ -1,6 +1,7 @@
 package it.pika.premiumreports.commands;
 
 import com.google.common.collect.Lists;
+import it.pika.libs.chat.Chat;
 import it.pika.libs.command.SubCommand;
 import it.pika.libs.config.Config;
 import it.pika.premiumreports.Main;
@@ -118,7 +119,7 @@ public class ReportCmd extends SubCommand {
         List<String> newList = Lists.newArrayList();
 
         for (String s : list)
-            newList.add(Main.parseColors(s)
+            newList.add(Chat.parseColors(s)
                     .replaceAll("%name%", user.getPlayer().getName())
                     .replaceAll("%points%", String.valueOf(user.getPoints()))
                     .replaceAll("%blocked%", user.isBlocked() ? Messages.YES_MESSAGE.get()

@@ -7,6 +7,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.SlotIterator;
 import fr.minuskube.inv.content.SlotPos;
+import it.pika.libs.chat.Chat;
 import it.pika.libs.config.Config;
 import it.pika.libs.item.ItemBuilder;
 import it.pika.premiumreports.Main;
@@ -72,14 +73,14 @@ public class UserReportsMenu implements InventoryProvider {
 
         contents.set(SlotPos.of(5, 0), ClickableItem.empty(new ItemBuilder()
                 .material(Material.valueOf(Main.getConfigFile().getString("User-Menu.Your-Points.Material")))
-                .name(Main.parseColors(Main.getConfigFile().getString("User-Menu.Your-Points.Name")))
+                .name(Chat.parseColors(Main.getConfigFile().getString("User-Menu.Your-Points.Name")))
                 .lore(parsePoints(Main.getConfigFile().getStringList("User-Menu.Your-Points.Lore"), player))
                 .build()));
 
         contents.set(SlotPos.of(5, 4), ClickableItem.of(new ItemBuilder()
                 .material(Material.valueOf(Main.getConfigFile().getString("User-Menu.New-Report.Material")))
-                .name(Main.parseColors(Main.getConfigFile().getString("User-Menu.New-Report.Name")))
-                .lore(Main.parseColors(Main.getConfigFile().getStringList("User-Menu.New-Report.Lore")))
+                .name(Chat.parseColors(Main.getConfigFile().getString("User-Menu.New-Report.Name")))
+                .lore(Chat.parseColors(Main.getConfigFile().getStringList("User-Menu.New-Report.Lore")))
                 .build(), e -> {
             player.closeInventory();
 
@@ -94,14 +95,14 @@ public class UserReportsMenu implements InventoryProvider {
 
         contents.set(SlotPos.of(5, 3), ClickableItem.of(new ItemBuilder()
                 .material(Material.valueOf(Main.getConfigFile().getString("User-Menu.Previous-Page.Material")))
-                .name(Main.parseColors(Main.getConfigFile().getString("User-Menu.Previous-Page.Name")))
-                .lore(Main.parseColors(Main.getConfigFile().getStringList("User-Menu.Previous-Page.Lore")))
+                .name(Chat.parseColors(Main.getConfigFile().getString("User-Menu.Previous-Page.Name")))
+                .lore(Chat.parseColors(Main.getConfigFile().getStringList("User-Menu.Previous-Page.Lore")))
                 .build(), e -> contents.inventory().open(player, pagination.previous().getPage())));
 
         contents.set(SlotPos.of(5, 5), ClickableItem.of(new ItemBuilder()
                 .material(Material.valueOf(Main.getConfigFile().getString("User-Menu.Next-Page.Material")))
-                .name(Main.parseColors(Main.getConfigFile().getString("User-Menu.Next-Page.Name")))
-                .lore(Main.parseColors(Main.getConfigFile().getStringList("User-Menu.Next-Page.Lore")))
+                .name(Chat.parseColors(Main.getConfigFile().getString("User-Menu.Next-Page.Name")))
+                .lore(Chat.parseColors(Main.getConfigFile().getStringList("User-Menu.Next-Page.Lore")))
                 .build(), e -> contents.inventory().open(player, pagination.next().getPage())));
     }
 
@@ -113,7 +114,7 @@ public class UserReportsMenu implements InventoryProvider {
         List<String> newList = Lists.newArrayList();
 
         for (String s : list)
-            newList.add(Main.parseColors(s).replaceAll("%points%",
+            newList.add(Chat.parseColors(s).replaceAll("%points%",
                     String.valueOf(User.of(player).getPoints())));
 
         return newList;

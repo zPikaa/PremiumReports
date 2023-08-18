@@ -4,10 +4,12 @@ import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.tchristofferson.configupdater.ConfigUpdater;
 import fr.minuskube.inv.InventoryManager;
+import it.pika.libs.chat.Chat;
 import it.pika.libs.config.Config;
 import it.pika.libs.reflection.Reflections;
 import it.pika.premiumreports.api.events.ReportsInitializeEvent;
 import it.pika.premiumreports.commands.ReportCmd;
+import it.pika.premiumreports.hooks.PlaceholdersHook;
 import it.pika.premiumreports.listeners.JoinListener;
 import it.pika.premiumreports.objects.Report;
 import it.pika.premiumreports.storage.MySQLCredentials;
@@ -21,7 +23,6 @@ import it.pika.premiumreports.utils.UpdateChecker;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.text.SimpleDateFormat;
@@ -42,7 +43,8 @@ public final class Main extends JavaPlugin {
     private static InventoryManager inventoryManager = null;
     @Getter
     private static LanguageManager languageManager = null;
-
+    @Getter
+    private static PlaceholdersHook placeholdersHook = null;
 
     @Getter
     private static Config configFile = null;
@@ -50,7 +52,13 @@ public final class Main extends JavaPlugin {
 
     @Getter
     private static final List<Report> reports = Lists.newArrayList();
-    public static final String VERSION = "1.3.2";
+    public static final String VERSION = "1.3.3";
+
+    @Override
+    public void onLoad() {
+        if (!setupPlaceholders())
+            console.warning("PlaceholderAPI not found, you will not be able to use placeholders!");
+    }
 
     @Override
     public void onEnable() {
@@ -160,52 +168,18 @@ public final class Main extends JavaPlugin {
         }
     }
 
-    public static String parseColors(String s) {
-        if (s == null)
-            return "null";
+    private boolean setupPlaceholders() {
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null)
+            return false;
 
-        var parsed = new StringBuilder();
-        var colorHex = "";
-        if (s.contains("&")) {
-            for (String color : s.split("&")) {
-                if (color.length() < 1) continue;
-                if (color.substring(0, 1).matches("[A-Fa-f0-9]|k|l|m|n|o|r")) {
-                    String colorCode = color.substring(0, 1);
-                    parsed.append(ChatColor.getByChar(colorCode.charAt(0)));
-                    parsed.append(color.substring(1));
-                    continue;
-                }
-                if (color.length() < 7) continue;
-                if (color.substring(0, 7).matches("#[A-Fa-f0-9]{6}")) {
-                    if (color.substring(0, 7).matches("#[A-Fa-f0-9]{6}")) {
-                        colorHex = color.substring(0, 7);
-                        parsed.append(net.md_5.bungee.api.ChatColor.of(colorHex));
-                        parsed.append(color.substring(7));
-                        continue;
-                    }
-                }
-                parsed.append(color);
-            }
-        } else {
-            parsed.append(s);
-        }
-
-        return parsed.toString();
-    }
-
-    public static List<String> parseColors(List<String> list) {
-        List<String> newList = Lists.newArrayList();
-
-        for (String s : list)
-            newList.add(parseColors(s));
-
-        return newList;
+        placeholdersHook = new PlaceholdersHook();
+        return true;
     }
 
     public static String parseMessage(String s, Report report) {
         var dateFormat = new SimpleDateFormat(Objects.requireNonNull(configFile.getString("Options.Date-Format")));
 
-        return parseColors(s.replaceAll("%reporter%", report.getReporter())
+        return Chat.parseColors(s.replaceAll("%reporter%", report.getReporter())
                 .replaceAll("%reported%", report.getReported())
                 .replaceAll("%reason%", report.getReason())
                 .replaceAll("%date%", dateFormat.format(report.getDate()))

@@ -1,7 +1,8 @@
 name: PremiumReports
-version: 1.3.2
+version: 1.3.3
 main: it.pika.premiumreports.Main
 api-version: '1.13'
 authors: [Pika]
 folia-supported: true
+softdepend: [PlaceholderAPI]
 description: PremiumReports plugin made with love and pizza by Pika

@@ -7,6 +7,7 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.SlotIterator;
 import fr.minuskube.inv.content.SlotPos;
+import it.pika.libs.chat.Chat;
 import it.pika.libs.config.Config;
 import it.pika.libs.item.ItemBuilder;
 import it.pika.premiumreports.Main;
@@ -124,21 +125,21 @@ public class StaffMenu implements InventoryProvider {
 
         contents.set(SlotPos.of(5, 4), ClickableItem.empty(new ItemBuilder()
                 .material(Material.valueOf(Main.getConfigFile().getString("Staff-Menu.Current-Page.Material")))
-                .name(Main.parseColors(Main.getConfigFile().getString("Staff-Menu.Current-Page.Name")
+                .name(Chat.parseColors(Main.getConfigFile().getString("Staff-Menu.Current-Page.Name")
                         .replaceAll("%page%", String.valueOf(pagination.getPage() + 1))))
-                .lore(Main.parseColors(Main.getConfigFile().getStringList("Staff-Menu.Current-Page.Lore")))
+                .lore(Chat.parseColors(Main.getConfigFile().getStringList("Staff-Menu.Current-Page.Lore")))
                 .build()));
 
         contents.set(SlotPos.of(5, 3), ClickableItem.of(new ItemBuilder()
                 .material(Material.valueOf(Main.getConfigFile().getString("Staff-Menu.Previous-Page.Material")))
-                .name(Main.parseColors(Main.getConfigFile().getString("Staff-Menu.Previous-Page.Name")))
-                .lore(Main.parseColors(Main.getConfigFile().getStringList("Staff-Menu.Previous-Page.Lore")))
+                .name(Chat.parseColors(Main.getConfigFile().getString("Staff-Menu.Previous-Page.Name")))
+                .lore(Chat.parseColors(Main.getConfigFile().getStringList("Staff-Menu.Previous-Page.Lore")))
                 .build(), e -> contents.inventory().open(player, pagination.previous().getPage())));
 
         contents.set(SlotPos.of(5, 5), ClickableItem.of(new ItemBuilder()
                 .material(Material.valueOf(Main.getConfigFile().getString("Staff-Menu.Next-Page.Material")))
-                .name(Main.parseColors(Main.getConfigFile().getString("Staff-Menu.Next-Page.Name")))
-                .lore(Main.parseColors(Main.getConfigFile().getStringList("Staff-Menu.Next-Page.Lore")))
+                .name(Chat.parseColors(Main.getConfigFile().getString("Staff-Menu.Next-Page.Name")))
+                .lore(Chat.parseColors(Main.getConfigFile().getStringList("Staff-Menu.Next-Page.Lore")))
                 .build(), e -> contents.inventory().open(player, pagination.next().getPage())));
     }
 

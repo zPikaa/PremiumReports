@@ -1,6 +1,7 @@
 package it.pika.premiumreports.objects;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
+import it.pika.libs.chat.Chat;
 import it.pika.libs.reflection.Reflections;
 import it.pika.premiumreports.Main;
 import it.pika.premiumreports.enums.Messages;
@@ -30,8 +31,8 @@ public class ReportProcedure implements Listener {
         active = true;
 
 
-        player.sendTitle(Main.parseColors(Main.getConfigFile().getString("Report-Procedure.Reported.Title")),
-                Main.parseColors(Main.getConfigFile().getString("Report-Procedure.Reported.Sub-Title")),
+        player.sendTitle(Chat.parseColors(Main.getConfigFile().getString("Report-Procedure.Reported.Title")),
+                Chat.parseColors(Main.getConfigFile().getString("Report-Procedure.Reported.Sub-Title")),
                 10, 9999999, 0);
     }
 
@@ -67,8 +68,8 @@ public class ReportProcedure implements Listener {
             reported = message;
             phase = Phase.REASON;
 
-            player.sendTitle(Main.parseColors(Main.getConfigFile().getString("Report-Procedure.Reason.Title")),
-                    Main.parseColors(Main.getConfigFile().getString("Report-Procedure.Reason.Sub-Title")),
+            player.sendTitle(Chat.parseColors(Main.getConfigFile().getString("Report-Procedure.Reason.Title")),
+                    Chat.parseColors(Main.getConfigFile().getString("Report-Procedure.Reason.Sub-Title")),
                     10, 9999999, 0);
             return;
         }
