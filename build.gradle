@@ -36,6 +36,8 @@ dependencies {
         transitive = false
     }
 
+    implementation 'org.bstats:bstats-bukkit:3.0.2'
+
     compileOnly 'me.clip:placeholderapi:2.11.3'
 }
 
@@ -69,8 +71,9 @@ processResources {
 shadowJar {
     archiveBaseName.set('PremiumReports')
     archiveClassifier.set('')
-    archiveVersion.set('1.3.3')
+    archiveVersion.set('1.3.4')
 
     relocate 'fr.minuskube.inv', 'it.pika.libs.smartinvs'
     relocate 'com.tchristofferson.configupdater', 'it.pika.libs.config.updater'
+    relocate 'org.bstats', 'it.pika.libs.bstats'
 }

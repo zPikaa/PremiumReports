@@ -18,10 +18,11 @@ import it.pika.premiumreports.storage.StorageType;
 import it.pika.premiumreports.storage.impl.MySQL;
 import it.pika.premiumreports.storage.impl.SQLite;
 import it.pika.premiumreports.utils.LanguageManager;
-import it.pika.premiumreports.utils.Metrics;
+import it.pika.premiumreports.utils.Logger;
 import it.pika.premiumreports.utils.UpdateChecker;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,14 +30,13 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 public final class Main extends JavaPlugin {
 
     @Getter
     private static Main instance = null;
     @Getter
-    private static final Logger console = Logger.getLogger("PremiumReports");
+    private static final Logger console = new Logger("PremiumReports");
     @Getter
     private static Storage storage = null;
     @Getter
@@ -52,7 +52,7 @@ public final class Main extends JavaPlugin {
 
     @Getter
     private static final List<Report> reports = Lists.newArrayList();
-    public static final String VERSION = "1.3.3";
+    public static final String VERSION = "1.3.4";
 
     @Override
     public void onLoad() {
@@ -64,6 +64,13 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         instance = this;
         var stopwatch = Stopwatch.createStarted();
+
+        console.info("§4  ____  ____  ");
+        console.info("§4 |  _ \\|  _ \\ ");
+        console.info("§4 | |_) | |_) |    §4Premium§cReports §7v%s §8| §aEnabling..".formatted(VERSION));
+        console.info("§4 |  __/|  _ <     §7Made with §clove §7and §epizza §7by §bzPikaa§7.");
+        console.info("§4 |_|   |_| \\_\\");
+        console.info("§4              ");
 
         if (Reflections.getNumericalVersion() < 13) {
             stopwatch.stop();
@@ -135,6 +142,7 @@ public final class Main extends JavaPlugin {
         }
 
         console.info("Storage type: %s".formatted(storage.getType().name()));
+        console.info(""); // For a good appearance
         return true;
     }
 
