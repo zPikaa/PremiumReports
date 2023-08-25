@@ -20,6 +20,10 @@ repositories {
         name = "placeholderapi"
         url = "https://repo.extendedclip.com/content/repositories/placeholderapi/"
     }
+    maven {
+        name = "CodeMC"
+        url = "https://repo.codemc.io/repository/maven-public/"
+    }
 }
 
 dependencies {
@@ -36,6 +40,7 @@ dependencies {
         transitive = false
     }
 
+    implementation 'dev.jorel:commandapi-bukkit-shade:9.1.0'
     implementation 'org.bstats:bstats-bukkit:3.0.2'
 
     compileOnly 'me.clip:placeholderapi:2.11.3'
@@ -71,9 +76,10 @@ processResources {
 shadowJar {
     archiveBaseName.set('PremiumReports')
     archiveClassifier.set('')
-    archiveVersion.set('1.3.4')
+    archiveVersion.set('1.3.5')
 
     relocate 'fr.minuskube.inv', 'it.pika.libs.smartinvs'
     relocate 'com.tchristofferson.configupdater', 'it.pika.libs.config.updater'
     relocate 'org.bstats', 'it.pika.libs.bstats'
+    relocate "dev.jorel.commandapi", "it.pika.libs.command"
 }

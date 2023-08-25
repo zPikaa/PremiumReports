@@ -3,6 +3,8 @@ package it.pika.premiumreports;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.tchristofferson.configupdater.ConfigUpdater;
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import fr.minuskube.inv.InventoryManager;
 import it.pika.libs.chat.Chat;
 import it.pika.libs.config.Config;
@@ -52,10 +54,12 @@ public final class Main extends JavaPlugin {
 
     @Getter
     private static final List<Report> reports = Lists.newArrayList();
-    public static final String VERSION = "1.3.4";
+    public static final String VERSION = "1.3.5";
 
     @Override
     public void onLoad() {
+        CommandAPI.onLoad(new CommandAPIBukkitConfig(this));
+
         if (!setupPlaceholders())
             console.warning("PlaceholderAPI not found, you will not be able to use placeholders!");
     }
@@ -63,6 +67,7 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        CommandAPI.onEnable();
         var stopwatch = Stopwatch.createStarted();
 
         console.info("§4  ____  ____  ");
@@ -105,6 +110,8 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        CommandAPI.onDisable();
+
         if (storage != null)
             storage.close();
     }
@@ -152,7 +159,7 @@ public final class Main extends JavaPlugin {
     }
 
     private void registerCommands() {
-        new ReportCmd(this, "report", "reports");
+        new ReportCmd().get().register();
     }
 
     private void setupInventories() {
